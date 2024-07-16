@@ -1,5 +1,5 @@
 #include "MPU6050.h"
-#include "328pb/I2C.h"
+#include "I2C.h"
 
 void MPU6050_Init(void) {
     I2C_Start();

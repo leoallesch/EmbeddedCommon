@@ -1,5 +1,5 @@
-#ifndef I2C_H
-#define I2C_H
+#ifndef _328PB_I2C_H
+#define _328PB_I2C_H
 
 #include <avr/io.h>
 

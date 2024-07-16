@@ -1,5 +1,5 @@
-#ifndef UART_H
-#define UART_H
+#ifndef _328PB_UART_H
+#define _328PB_UART_H
 
 #include <avr/io.h>
 

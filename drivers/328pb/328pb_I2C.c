@@ -1,4 +1,4 @@
-#include "I2C.h"
+#include "328pb_I2C.h"
 
 void I2C_Init(uint32_t scl_freq) {
     // Set SCL frequency
