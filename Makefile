@@ -3,7 +3,7 @@ TARGET ?= test
 BUILD_DIR ?= ./build
 
 # Define the source directory
-SRC_DIRS ?= src
+SRC_DIRS ?= src \
 
 # Find all source files in the source directory and subdirectories
 SRCS := $(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c' -or -name '*.s')
