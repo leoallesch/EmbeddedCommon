@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-typedef uint16_t TimeSourceTicks_t;
+typedef uint32_t TimeSourceTicks_t;
 
 struct I_TimeSource_Api_t;
 
@@ -14,10 +14,10 @@ typedef struct
 
 typedef struct I_TimeSource_Api_t
 {
-  TimeSourceTicks_t (*TimeSource_Ticks)(I_TimeSource_t *instance);
+  TimeSourceTicks_t (*Ticks)(I_TimeSource_t *self);
 } I_TimeSource_Api_t;
 
-#define TimeSource_Ticks(instance) \
-  (instance)->api->TimeSource_Ticks((instance))
+#define TimeSourceTicks(_self) \
+  _self->api->Ticks(_self)
 
 #endif

@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "*.h": "c",
+        "*.cpp": "cpp",
+        "*.c": "c"
+    },
+    "[c]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
+    "[cpp]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
+    "editor.formatOnSave": true,
+    "editor.snippetSuggestions": "bottom",
+    "files.exclude": {
+        "build/*.cpp": true,
+    }
+}
