@@ -1,10 +1,35 @@
 #include "Timer.h"
+#include <stddef.h>
 
 static void AddTimer(TimerGroup_t *self, Timer_t *timer)
 {
   LinkedList_Remove(&self->timers, &timer->node);
+
   timer->expired = false;
-  LinkedList_PushFront(&self->timers, &timer->node);
+
+  LinkedListNode_t *after = NULL;
+  TimerTicks_t toAddRemainingTicks = timer->expirationTicks - self->currentTicks;
+
+  LinkedList_ForEach(&self->timers, Timer_t, timer, {
+    TimerTicks_t remainingTicks = timer->expirationTicks - self->currentTicks;
+
+    if(timer->expired || (toAddRemainingTicks >= remainingTicks))
+    {
+      after = &timer->node;
+    }
+    else
+    {
+      break;
+    } });
+
+  if (after)
+  {
+    LinkedList_InsertAfter(&self->timers, after, &timer->node);
+  }
+  else
+  {
+    LinkedList_PushFront(&self->timers, &timer->node);
+  }
 }
 
 static TimeSourceTicks_t PendingTicks(TimerGroup_t *self)
@@ -19,7 +44,7 @@ void TimerGroup_Init(TimerGroup_t *self, I_TimeSource_t *timeSource)
   LinkedList_Init(&self->timers);
 }
 
-void TimerGroup_Run(TimerGroup_t *self)
+TimerTicks_t TimerGroup_Run(TimerGroup_t *self)
 {
   TimeSourceTicks_t currentTimeSourceTicks = TimeSourceTicks(self->timeSource);
   TimeSourceTicks_t delta = currentTimeSourceTicks - self->lastTimeSourceTicks;
@@ -64,6 +89,17 @@ void TimerGroup_Run(TimerGroup_t *self)
     }
     break;
   });
+
+  return TimerGroup_TicksUntilNextReady(self);
+}
+
+TimerTicks_t TimerGroup_TicksUntilNextReady(TimerGroup_t *self)
+{
+  LinkedList_ForEach(&self->timers, Timer_t, timer, {
+    return TimerGroup_RemainingTicks(self, timer);
+  });
+
+  return (TimerTicks_t)-1;
 }
 
 void TimerGroup_StartOneShot(
@@ -96,7 +132,24 @@ void TimerGroup_StartPeriodic(
   AddTimer(self, timer);
 }
 
+void TimerGroup_Stop(TimerGroup_t *self, Timer_t *timer)
+{
+  LinkedList_Remove(&self->timers, &timer->node);
+}
+
 bool TimerGroup_TimerIsRunning(TimerGroup_t *self, Timer_t *timer)
 {
   return LinkedList_Contains(&self->timers, &timer->node);
+}
+
+TimerTicks_t TimerGroup_RemainingTicks(TimerGroup_t *self, Timer_t *timer)
+{
+  TimerTicks_t remaining = timer->expirationTicks - self->currentTicks;
+  TimeSourceTicks_t pending = PendingTicks(self);
+
+  if (!timer->expired && (remaining > pending))
+  {
+    return remaining - pending;
+  }
+  return 0;
 }

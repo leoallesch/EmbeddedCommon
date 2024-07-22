@@ -13,7 +13,7 @@ void LinkedList_PushFront(LinkedList_t *self, LinkedListNode_t *node)
   self->head.next = node;
 }
 
-void LinkedList_Push(LinkedList_t *self, LinkedListNode_t *node)
+void LinkedList_PushBack(LinkedList_t *self, LinkedListNode_t *node)
 {
   LinkedListNode_t *current = self->head.next;
 
@@ -24,6 +24,35 @@ void LinkedList_Push(LinkedList_t *self, LinkedListNode_t *node)
 
   current->next = node;
   node->next = &self->head;
+}
+
+void LinkedList_InsertAfter(LinkedList_t *self, LinkedListNode_t *after, LinkedListNode_t *node)
+{
+  (void)self;
+  node->next = after->next;
+  after->next = node;
+}
+
+LinkedListNode_t *LinkedList_PopFront(LinkedList_t *self)
+{
+  LinkedListNode_t *node = self->head.next;
+  self->head.next = self->head.next->next;
+  return node;
+}
+
+LinkedListNode_t *LinkedList_PopBack(LinkedList_t *self)
+{
+  LinkedListNode_t *previous = self->head.next;
+  LinkedListNode_t *current = self->head.next;
+
+  while (current->next != &self->head)
+  {
+    previous = current;
+    current = current->next;
+  }
+
+  previous->next = &self->head;
+  return current;
 }
 
 void LinkedList_Remove(LinkedList_t *self, LinkedListNode_t *node)

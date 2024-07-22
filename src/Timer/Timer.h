@@ -32,7 +32,9 @@ typedef struct TimerGroup_t
 
 void TimerGroup_Init(TimerGroup_t *self, I_TimeSource_t *timeSource);
 
-void TimerGroup_Run(TimerGroup_t *self);
+TimerTicks_t TimerGroup_Run(TimerGroup_t *self);
+
+TimerTicks_t TimerGroup_TicksUntilNextReady(TimerGroup_t *self);
 
 void TimerGroup_StartOneShot(
     TimerGroup_t *self,
@@ -48,6 +50,10 @@ void TimerGroup_StartPeriodic(
     TimerCallback_t callback,
     void *context);
 
+void TimerGroup_Stop(TimerGroup_t *self, Timer_t *timer);
+
 bool TimerGroup_TimerIsRunning(TimerGroup_t *self, Timer_t *timer);
+
+TimerTicks_t TimerGroup_RemainingTicks(TimerGroup_t *self, Timer_t *timer);
 
 #endif

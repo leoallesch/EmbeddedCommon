@@ -23,7 +23,13 @@ void LinkedList_Init(LinkedList_t *self);
 
 void LinkedList_PushFront(LinkedList_t *self, LinkedListNode_t *node);
 
-void LinkedList_Push(LinkedList_t *self, LinkedListNode_t *node);
+void LinkedList_PushBack(LinkedList_t *self, LinkedListNode_t *node);
+
+void LinkedList_InsertAfter(LinkedList_t *self, LinkedListNode_t *after, LinkedListNode_t *node);
+
+LinkedListNode_t *LinkedList_PopFront(LinkedList_t *self);
+
+LinkedListNode_t *LinkedList_PopBack(LinkedList_t *self);
 
 void LinkedList_Remove(LinkedList_t *self, LinkedListNode_t *node);
 
